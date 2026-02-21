@@ -1,0 +1,92 @@
+{% extends 'base1.html' %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+
+                    <!-- Title -->
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold text-primary">
+                            <i class="bi bi-credit-card"></i> Complete Your Payment
+                        </h3>
+                        <p class="text-muted small">
+                            Secure payment powered by Razorpay
+                        </p>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="bg-light rounded-3 p-4 text-center mb-4">
+                        <h6 class="text-muted mb-2">Total Amount</h6>
+                        <h2 class="fw-bold text-success">₹{{ amount }}</h2>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <div class="d-grid">
+                        <button id="rzp-button" class="btn btn-primary btn-lg rounded-3">
+                            <i class="bi bi-lock-fill"></i> Pay Securely
+                        </button>
+                    </div>
+
+                    <p class="text-center text-muted small mt-3">
+                        🔒 Your payment is encrypted & secure
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{ key_id }}",
+    "amount": {{ amount * 100 }},
+    "currency": "INR",
+    "name": "SmartCart",
+    "description": "Order Payment",
+    "order_id": "{{ order_id }}",
+    "theme": { "color": "#0d6efd" },
+
+    "handler": function (response){
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/verify-payment";
+
+        var fields = {
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+        };
+
+        for (var key in fields) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = fields[key];
+            form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+};
+</script>
+
+{% endblock %}

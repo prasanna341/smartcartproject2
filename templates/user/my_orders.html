@@ -1,0 +1,105 @@
+{% extends "base1.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <!-- Page Title -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold">
+                    <i class="bi bi-box-seam"></i> My Orders
+                </h3>
+            </div>
+
+            {% if orders|length == 0 %}
+
+                <!-- Empty State -->
+                <div class="card border-0 shadow-sm rounded-4 text-center p-5">
+                    <i class="bi bi-cart-x text-muted" style="font-size: 50px;"></i>
+                    <h5 class="mt-3">No Orders Yet</h5>
+                    <p class="text-muted">
+                        Looks like you haven't placed any orders.
+                    </p>
+                    <a href="/user/products" class="btn btn-primary mt-3 px-4">
+                        Start Shopping
+                    </a>
+                </div>
+
+            {% else %}
+
+                {% for order in orders %}
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+
+                        <div class="row align-items-center">
+
+                            <!-- Left Section -->
+                            <div class="col-md-8">
+
+                                <!-- ✅ Changed Here -->
+                                <h5 class="fw-bold mb-2">
+                                    Order #{{ order.user_order_no }}
+                                </h5>
+
+                                <div class="text-muted small mb-2">
+                                    Placed on {{ order.created_at }}
+                                </div>
+
+                                <div class="d-flex gap-4">
+
+                                    <div>
+                                        <span class="text-muted">Amount</span><br>
+                                        <span class="fw-bold text-success">
+                                            ₹{{ order.amount }}
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-muted">Status</span><br>
+                                        {% if order.payment_status == 'Paid' %}
+                                            <span class="badge bg-success">
+                                                {{ order.payment_status }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">
+                                                {{ order.payment_status }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Right Section -->
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                                <!-- Keep order_id for internal routing -->
+                                <a href="/user/order-success/{{ order.order_id }}" 
+                                   class="btn btn-outline-primary btn-sm me-2">
+                                    View Details
+                                </a>
+
+                                <a href="/user/download-invoice/{{ order.order_id }}" 
+                                   class="btn btn-success btn-sm">
+                                    Invoice
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

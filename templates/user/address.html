@@ -1,0 +1,133 @@
+{% extends 'base1.html' %}
+{% block title %}Select Address{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold text-center mb-4">📦 Select Delivery Address</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="row">
+
+        <!-- LEFT SIDE - Existing Addresses -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">Saved Addresses</h5>
+
+                    {% if addresses %}
+                        {% for address in addresses %}
+                        <div class="border rounded p-3 mb-3">
+
+                            <p class="mb-1 fw-semibold">
+                                {{ address.full_name }}
+                            </p>
+                            <p class="mb-1 text-muted">
+                                {{ address.address_line }}, {{ address.city }}
+                            </p>
+                            <p class="mb-1 text-muted">
+                                {{ address.state }} - {{ address.pincode }}
+                            </p>
+                            <p class="mb-2 text-muted">
+                                📞 {{ address.phone }}
+                            </p>
+
+                            <a href="/user/pay?address_id={{ address.address_id }}"
+                               class="btn btn-success btn-sm">
+                                Deliver Here
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            No saved addresses found.
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE - Add New Address -->
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">➕ Add New Address</h5>
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input type="text" name="full_name"
+                                   class="form-control"
+                                   placeholder="Enter full name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Phone Number</label>
+                            <input type="text" name="phone"
+                                   class="form-control"
+                                   pattern="[0-9]{10}"
+                                   placeholder="10-digit number" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Address Line</label>
+                            <textarea name="address_line"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="House no, street, area"
+                                      required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">City</label>
+                                <input type="text" name="city"
+                                       class="form-control"
+                                       placeholder="City" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">State</label>
+                                <input type="text" name="state"
+                                       class="form-control"
+                                       placeholder="State" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Pincode</label>
+                            <input type="text" name="pincode"
+                                   class="form-control"
+                                   pattern="[0-9]{6}"
+                                   placeholder="6-digit pincode" required>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Save Address
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

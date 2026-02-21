@@ -1,0 +1,43 @@
+{% extends "base1.html" %}
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+  <div class="col-md-6">
+
+    <div class="card shadow-lg border-0 rounded-4 p-4 text-center">
+
+      <!-- Avatar -->
+      <div class="mb-3">
+        <div class="rounded-circle bg-light d-inline-flex 
+                    align-items-center justify-content-center"
+             style="width:90px; height:90px;">
+          <i class="bi bi-person-fill fs-1 text-primary"></i>
+        </div>
+      </div>
+
+      <!-- User Name -->
+      <h4 class="fw-bold mb-1 text-capitalize">
+        {{ user_name }} 👋
+      </h4>
+
+      <p class="text-muted mb-4">
+        SmartCart User Panel
+      </p>
+
+      <!-- Big Button -->
+      <a href="/user/products"
+   class="btn btn-primary btn-sm rounded-pill px-3">
+   🛍 Shop Now
+     </a>
+
+
+      
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

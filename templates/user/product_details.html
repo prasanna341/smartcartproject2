@@ -1,0 +1,48 @@
+{% extends "base1.html" %}
+{% block title %}Product Details{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+
+    <div class="card shadow-sm">
+      <div class="card-body p-4 text-center">
+
+        <h4 class="fw-bold mb-3">
+          {{ product.name }}
+        </h4>
+
+        <img src="/static/uploads/product_images/{{ product.image }}"
+             class="img-fluid mb-4"
+             style="max-height:250px; object-fit:contain;">
+
+        <p class="mb-2">
+          <strong>Description:</strong><br>
+          <span class="text-muted">{{ product.description }}</span>
+        </p>
+
+        <p class="mb-1">
+          <strong>Category:</strong> 
+          <span class="text-secondary">{{ product.category }}</span>
+        </p>
+
+        <p class="mb-3 fs-5 fw-semibold text-primary">
+          ₹{{ product.price }}
+        </p>
+        <form action="/user/add-to-cart/{{product.product_id}}" method="GET">
+          <button type="submit" class="btn btn-outline-primary btn-sm">Add to Cart</button>
+        </form>
+        <br>
+
+        <a href="/user/products" class="btn btn-outline-primary btn-sm">
+          Back to Products
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

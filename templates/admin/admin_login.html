@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-4">
+
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+
+        <h4 class="text-center mb-3 fw-bold">
+          Admin Login
+        </h4>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input 
+              type="email" 
+              name="email" 
+              class="form-control" 
+              required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input 
+              type="password" 
+              name="password" 
+              class="form-control" 
+              required>
+          </div>
+
+          <div class="d-grid justify-content-center mt-3">
+            <button class="btn btn-primary px-4">
+              Login
+            </button>
+          </div>
+
+        </form>
+         <div class="text-center mt-3">
+          <a href="/admin-signup" class="text-decoration-none">
+            Don’t have an account? Register
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

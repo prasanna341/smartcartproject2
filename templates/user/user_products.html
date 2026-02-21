@@ -1,0 +1,111 @@
+{% extends "base1.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+
+<h3 class="text-center mb-4 fw-bold">All Products</h3>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }} text-center">
+        {{ message }}
+    </div>
+  {% endfor %}
+{% endwith %}
+
+<!-- 🔥 Category Filter Only -->
+<div class="row mb-4">
+    <div class="col-md-4">
+
+        <form method="GET" action="/user/products" class="d-flex gap-2">
+
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+
+                {% for cat in categories %}
+                <option value="{{ cat.category }}"
+                    {% if request.args.get('category') == cat.category %}
+                        selected
+                    {% endif %}>
+                    {{ cat.category }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-primary">
+                Filter
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<hr class="mb-4">
+
+<!-- Product Grid -->
+<div class="row g-4">
+
+    {% if products|length == 0 %}
+        <div class="text-center">
+            <h5>No products found.</h5>
+        </div>
+    {% else %}
+
+        {% for product in products %}
+        <div class="col-md-3 col-sm-6">
+
+            <div class="card product-card border-0 rounded-4 p-3 h-100 position-relative">
+
+                <!-- Trending Badge -->
+                <span class="badge bg-primary position-absolute top-0 start-0 m-2">
+                    Trending
+                </span>
+
+                <!-- Product Image -->
+                <div class="text-center">
+                    <img src="/static/uploads/product_images/{{ product.image }}"
+                         class="img-fluid mb-3"
+                         style="height:170px; object-fit:contain;">
+                </div>
+
+                <!-- Rating -->
+                <div class="small text-muted mb-1">
+                    ⭐ 4.3
+                </div>
+
+                <!-- Product Name -->
+                <h6 class="fw-semibold mb-1">
+                    {{ product.name }}
+                </h6>
+
+                <!-- Category -->
+                <p class="text-muted small mb-1">
+                    {{ product.category }}
+                </p>
+
+                <!-- Price -->
+                <h5 class="fw-bold mb-3">
+                    ₹{{ product.price }}
+                </h5>
+
+                <!-- View Button -->
+                <div class="text-center mt-auto">
+                    <a href="/user/product/{{ product.product_id }}" 
+                       class="btn btn-primary btn-sm rounded-pill px-3">
+                        View Product
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}All Products{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-body">
+
+        <h3 class="mb-4 text-center">📦 Product List</h3>
+
+        {% if products %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th width="220">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+    {% for product in products %}
+<tr>
+    <td>{{ product.product_id }}</td>
+
+    <td>
+        <img src="{{ url_for('static', filename='uploads/product_images/' + product.image) }}"
+             width="60"
+             height="60"
+             style="object-fit: cover; border-radius: 5px;">
+    </td>
+
+    <td>{{ product.name }}</td>
+    <td>{{ product.category }}</td>
+    <td>₹ {{ product.price }}</td>
+
+    <td>
+        <a href="{{ url_for('view_item', item_id=product.product_id) }}"
+           class="btn btn-info btn-sm">View</a>
+
+        <a href="{{ url_for('update_item', item_id=product.product_id) }}"
+           class="btn btn-warning btn-sm">Update</a>
+
+        <a href="{{ url_for('delete_item', item_id=product.product_id) }}"
+           class="btn btn-danger btn-sm">Delete</a>
+    </td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+        </div>
+        {% else %}
+            <p class="text-center text-muted">No products available.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
