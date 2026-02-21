@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- ✅ IMPORTANT FOR RESPONSIVENESS -->
+    <!-- REQUIRED FOR MOBILE -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}SmartCart{% endblock %}</title>
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         body {
@@ -20,79 +20,75 @@
         }
 
         .product-card {
-            background-color: #ffffff;
             transition: 0.3s ease;
         }
 
         .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
         }
 
         footer {
             font-size: 14px;
+        }
+
+        @media (max-width: 576px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
         }
     </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-<!-- ================= NAVBAR ================= -->
+<!-- NAVBAR -->
 
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #0d6efd;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
 
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold text-white" href="/user/products">
+        <a class="navbar-brand fw-bold" href="/user/products">
             <i class="bi bi-cart-fill"></i> SmartCart
         </a>
 
-        <!-- Mobile Toggle -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- ✅ EDITED NAVBAR CONTENT -->
         <div class="collapse navbar-collapse" id="navbarNav">
 
             {% if session.get('user_id') %}
 
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3 text-center text-lg-start">
+            <ul class="navbar-nav ms-auto gap-lg-3 align-items-lg-center">
 
-                <!-- Welcome -->
                 <li class="nav-item">
-                    <span class="fw-semibold text-white d-block py-2">
+                    <span class="text-white fw-semibold d-block py-2">
                         Welcome, {{ session['user_name'] }}
                     </span>
                 </li>
 
-                <!-- My Orders -->
                 <li class="nav-item">
-                    <a href="/user/my-orders" class="btn btn-light btn-sm w-100 w-lg-auto">
-                        <i class="bi bi-box-seam"></i> My Orders
+                    <a href="/user/my-orders" class="btn btn-light btn-sm">
+                        Orders
                     </a>
                 </li>
 
-                <!-- Cart -->
                 <li class="nav-item">
-                    <a href="/user/cart"
-                       class="btn btn-light position-relative d-flex align-items-center justify-content-center"
-                       style="width:40px; height:40px; border-radius:50%;">
+                    <a href="/user/cart" class="btn btn-light btn-sm position-relative">
                         <i class="bi bi-cart"></i>
-
                         {% if cart_count|default(0) > 0 %}
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill">
                             {{ cart_count }}
                         </span>
                         {% endif %}
                     </a>
                 </li>
 
-                <!-- Logout -->
                 <li class="nav-item">
-                    <a href="/user-logout"
-                       class="btn btn-light d-flex align-items-center justify-content-center"
-                       style="width:40px; height:40px; border-radius:50%;">
+                    <a href="/user-logout" class="btn btn-light btn-sm">
                         <i class="bi bi-box-arrow-right"></i>
                     </a>
                 </li>
@@ -101,16 +97,16 @@
 
             {% else %}
 
-            <ul class="navbar-nav ms-auto gap-lg-2 text-center">
+            <ul class="navbar-nav ms-auto gap-lg-2">
 
                 <li class="nav-item">
-                    <a class="btn btn-light btn-sm px-3 w-100 w-lg-auto" href="/user/user-login">
+                    <a class="btn btn-light btn-sm" href="/user/user-login">
                         Login
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="btn btn-light btn-sm px-3 w-100 w-lg-auto" href="/user-register">
+                    <a class="btn btn-light btn-sm" href="/user-register">
                         Register
                     </a>
                 </li>
@@ -123,34 +119,21 @@
     </div>
 </nav>
 
-<!-- ================= MAIN CONTENT ================= -->
+<!-- MAIN CONTENT -->
 
-<div class="container my-5">
+<div class="container my-4 flex-grow-1">
     {% block content %}{% endblock %}
 </div>
 
-<!-- ================= FOOTER ================= -->
+<!-- FOOTER -->
 
-<footer class="text-white text-center py-4 mt-auto" style="background-color:#1a73e8;">
+<footer class="bg-primary text-white text-center py-4 mt-auto">
     <div class="container">
-        <h5 class="fw-bold mb-2">SmartCart</h5>
-
-        <p class="mb-2">
-            Your trusted shopping partner with quality products, secure payments,
-            and fast delivery across India.
-        </p>
-
-        <p class="mb-2">
-            <strong>Support:</strong> support@smartcart.com
-        </p>
-
-        <hr class="border-light">
-
-        <small>© 2026 SmartCart | Gudapati Lakshmi Anasuya</small>
+        <h5 class="fw-bold">SmartCart</h5>
+        <small>© 2026 SmartCart</small>
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

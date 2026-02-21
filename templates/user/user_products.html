@@ -1,5 +1,4 @@
 {% extends "base1.html" %}
-
 {% block title %}Products{% endblock %}
 
 {% block content %}
@@ -15,11 +14,11 @@
   {% endfor %}
 {% endwith %}
 
-<!-- 🔥 Category Filter Only -->
-<div class="row mb-4">
-    <div class="col-md-4">
+<!-- 🔥 Category Filter -->
+<div class="row mb-4 justify-content-center">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
 
-        <form method="GET" action="/user/products" class="d-flex gap-2">
+        <form method="GET" action="/user/products" class="d-flex flex-column flex-sm-row gap-2">
 
             <select name="category" class="form-select">
                 <option value="">All Categories</option>
@@ -49,15 +48,15 @@
 <div class="row g-4">
 
     {% if products|length == 0 %}
-        <div class="text-center">
+        <div class="col-12 text-center">
             <h5>No products found.</h5>
         </div>
     {% else %}
 
         {% for product in products %}
-        <div class="col-md-3 col-sm-6">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
 
-            <div class="card product-card border-0 rounded-4 p-3 h-100 position-relative">
+            <div class="card product-card border-0 rounded-4 p-3 h-100 position-relative shadow-sm">
 
                 <!-- Trending Badge -->
                 <span class="badge bg-primary position-absolute top-0 start-0 m-2">
@@ -66,9 +65,9 @@
 
                 <!-- Product Image -->
                 <div class="text-center">
-                    <img src="/static/uploads/product_images/{{ product.image }}"
+                    <img src="{{ url_for('static', filename='uploads/product_images/' + product.image) }}"
                          class="img-fluid mb-3"
-                         style="height:170px; object-fit:contain;">
+                         style="height:160px; object-fit:contain;">
                 </div>
 
                 <!-- Rating -->
@@ -94,7 +93,7 @@
                 <!-- View Button -->
                 <div class="text-center mt-auto">
                     <a href="/user/product/{{ product.product_id }}" 
-                       class="btn btn-primary btn-sm rounded-pill px-3">
+                       class="btn btn-primary btn-sm rounded-pill px-3 w-100">
                         View Product
                     </a>
                 </div>

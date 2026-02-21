@@ -3,19 +3,21 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
-  <div class="col-md-4">
+<div class="row justify-content-center align-items-center" style="min-height:70vh;">
 
-    <div class="card shadow-sm">
+  <div class="col-11 col-sm-8 col-md-6 col-lg-4">
+
+    <div class="card shadow-sm border-0 rounded-4">
       <div class="card-body p-4">
 
-        <h4 class="text-center mb-3 fw-bold">
+        <h4 class="text-center mb-4 fw-bold">
           User Login
         </h4>
 
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% for category, message in messages %}
-            <div class="alert alert-{{ category }} text-center">
+            <div class="alert alert-{{ category }} text-center py-2">
               {{ message }}
             </div>
           {% endfor %}
@@ -24,33 +26,33 @@
         <form method="POST" action="/user/user-login">
 
           <div class="mb-3">
-            <label class="form-label">Email</label>
+            <label class="form-label small">Email</label>
             <input 
               type="email" 
               name="email" 
               class="form-control" 
+              placeholder="Enter your email"
               required>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Password</label>
+            <label class="form-label small">Password</label>
             <input 
               type="password" 
               name="password" 
               class="form-control" 
+              placeholder="Enter your password"
               required>
           </div>
 
-          <div class="d-grid mt-3">
-            <button class="btn btn-primary">
+          <button type="submit" class="btn btn-primary w-100 mt-2">
               Login
-            </button>
-          </div>
+          </button>
 
         </form>
 
         <div class="text-center mt-3">
-          <a href="/user-register" class="text-decoration-none">
+          <a href="/user-register" class="text-decoration-none small">
             Don’t have an account? Register
           </a>
         </div>
@@ -59,6 +61,7 @@
     </div>
 
   </div>
+
 </div>
 
 {% endblock %}
