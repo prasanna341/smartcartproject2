@@ -1,84 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Invoice</title>
+<meta charset="UTF-8">
+<title>Invoice #{{ order.user_order_no }}</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+        font-size: 11px;
+        color: #333;
+    }
 
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .invoice-box {
-            width: 80%;
-            margin: auto;
-            border: 1px solid #eee;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        table { 
-            width: 100%; 
-            margin-top: 20px; 
-            border-collapse: collapse; 
-        }
-        th, td { 
-            border: 1px solid #ddd; 
-            padding: 8px; 
-            text-align: left; 
-        }
-        th { background-color: #f5f5f5; }
-        .total-row {
-            font-weight: bold;
-            background-color: #f9f9f9;
-        }
-        .right { text-align: right; }
-    </style>
+    .invoice-container {
+        width: 100%;
+        max-width: 750px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 6px;
+        margin-bottom: 8px;
+    }
+
+    .company h2 {
+        margin: 0;
+        font-size: 16px;
+        color: #0d6efd;
+    }
+
+    .company p,
+    .invoice-info p {
+        margin: 2px 0;
+        font-size: 10px;
+    }
+
+    .section {
+        margin-bottom: 10px;
+    }
+
+    .section h3 {
+        margin: 4px 0;
+        font-size: 12px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 3px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+
+    th {
+        background: #0d6efd;
+        color: white;
+        padding: 5px;
+        font-size: 10px;
+        text-align: left;
+    }
+
+    td {
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+        font-size: 10px;
+    }
+
+    .total-row td {
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 9px;
+        margin-top: 8px;
+        border-top: 1px solid #ccc;
+        padding-top: 5px;
+    }
+</style>
 </head>
 <body>
 
-<div class="invoice-box">
+<div class="invoice-container">
 
+    <!-- HEADER -->
     <div class="header">
-        <h2>SmartCart Invoice</h2>
+        <div class="company">
+            <h2>SmartCart</h2>
+            <p>Email: support@smartcart.com</p>
+            <p>India</p>
+        </div>
 
-        {% if order.user_order_no %}
-            <p><strong>Order Number:</strong> #{{ order.user_order_no }}</p>
-        {% endif %}
-
-        <p><strong>System Order ID:</strong> {{ order.order_id }}</p>
-        <p><strong>Payment ID:</strong> {{ order.razorpay_payment_id }}</p>
-        <p><strong>Date:</strong> {{ order.created_at }}</p>
+        <div class="invoice-info">
+            <p><strong>Invoice:</strong> {{ order.user_order_no }}</p>
+            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+            <p><strong>Payment:</strong> {{ order.payment_status }}</p>
+            <p><strong>Date:</strong> {{ order.created_at }}</p>
+        </div>
     </div>
 
-    <h3>Customer Details</h3>
-    <p><strong>User ID:</strong> {{ order.user_id }}</p>
+    <!-- CUSTOMER -->
+    <div class="section">
+        <h3>Billing & Shipping</h3>
+        <p><strong>Name:</strong> {{ address.full_name if address else user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email if user else '' }}</p>
+        <p><strong>Phone:</strong> {{ address.phone if address else '' }}</p>
+        <p>
+            <strong>Address:</strong>
+            {{ address.address_line if address else '' }},
+            {{ address.city if address else '' }},
+            {{ address.state if address else '' }} -
+            {{ address.pincode if address else '' }}
+        </p>
+    </div>
 
-    <h3>Items</h3>
+    <!-- ITEMS -->
+    <div class="section">
+        <h3>Order Items</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price (₹)</th>
+                    <th>Total (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for it in items %}
+                <tr>
+                    <td>{{ it.product_name }}</td>
+                    <td>{{ it.quantity }}</td>
+                    <td>{{ "%.2f"|format(it.price) }}</td>
+                    <td>{{ "%.2f"|format(it.quantity * it.price) }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3">Grand Total</td>
+                    <td>₹{{ "%.2f"|format(order.amount) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <table>
-        <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Price (₹)</th>
-            <th>Total (₹)</th>
-        </tr>
-
-        {% for it in items %}
-        <tr>
-            <td>{{ it.product_name }}</td>
-            <td>{{ it.quantity }}</td>
-            <td>₹{{ it.price }}</td>
-            <td>₹{{ it.quantity * it.price }}</td>
-        </tr>
-        {% endfor %}
-
-        <tr class="total-row">
-            <td colspan="3" class="right">Grand Total</td>
-            <td>₹{{ order.amount }}</td>
-        </tr>
-
-    </table>
+    <!-- FOOTER -->
+    <div class="footer">
+        Thank you for shopping with SmartCart |
+        System Generated Invoice |
+        support@smartcart.com
+    </div>
 
 </div>
 

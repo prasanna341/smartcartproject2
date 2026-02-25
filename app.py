@@ -1259,40 +1259,69 @@ def download_invoice(order_id):
 
     if 'user_id' not in session:
         flash("Please login!", "danger")
-        return redirect('/user-login')
+        return redirect('/user/user-login')
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT * FROM orders WHERE order_id=? AND user_id=?",
-        (order_id, session['user_id'])
-    )
+    # 1️⃣ Fetch order
+    cursor.execute("""
+        SELECT * FROM orders 
+        WHERE order_id=? AND user_id=?
+    """, (order_id, session['user_id']))
     order = cursor.fetchone()
-
-    cursor.execute(
-        "SELECT * FROM order_items WHERE order_id=?",
-        (order_id,)
-    )
-    items = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
 
     if not order:
         flash("Order not found.", "danger")
         return redirect('/user/my-orders')
 
-    html = render_template("user/invoice.html", order=order, items=items)
+    # 2️⃣ Fetch order items
+    cursor.execute("""
+        SELECT * FROM order_items 
+        WHERE order_id=?
+    """, (order_id,))
+    items = cursor.fetchall()
+
+    # 3️⃣ Fetch user details
+    cursor.execute("""
+        SELECT name, email 
+        FROM users 
+        WHERE user_id=?
+    """, (session['user_id'],))
+    user = cursor.fetchone()
+
+    # 4️⃣ Fetch address using order.address_id ✅ NEW
+    address = None
+    if order['address_id']:
+        cursor.execute("""
+            SELECT * FROM user_addresses
+            WHERE address_id=?
+        """, (order['address_id'],))
+        address = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    # 5️⃣ Pass address also to template ✅
+    html = render_template(
+        "user/invoice.html",
+        order=order,
+        items=items,
+        user=user,
+        address=address   # 👈 IMPORTANT
+    )
 
     pdf = generate_pdf(html)
+
+    if not pdf:
+        flash("Error generating PDF", "danger")
+        return redirect('/user/my-orders')
 
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f"attachment; filename=invoice_{order_id}.pdf"
 
     return response
-
 
 # ==========================================================
 # STATIC PAGES
