@@ -1,62 +1,53 @@
-{% extends 'base.html' %}
-{% block title %}Admin Login{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<div class="row justify-content-center">
-  <div class="col-md-4">
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 85vh;">
 
-    <div class="card shadow-sm">
-      <div class="card-body p-4">
+    <div class="col-11 col-sm-8 col-md-6 col-lg-4">
 
-        <h4 class="text-center mb-3 fw-bold">
-          Admin Login
-        </h4>
+        <div class="card shadow-lg border-0 rounded-4">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }} text-center">
-              {{ message }}
+            <div class="card-body p-4">
+
+                <h3 class="text-center mb-4 fw-bold">Admin Login</h3>
+
+                <form method="POST">
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter email" required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Password</label>
+                        <input type="password" name="password" class="form-control form-control-lg" placeholder="Enter password" required>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-3">
+                            Login
+                        </button>
+                    </div>
+
+                    <!-- Register Link -->
+                    <p class="text-center mt-4 mb-0">
+                        Don’t have an account?
+                        <a href="/admin-signup" class="fw-semibold text-decoration-none">
+                            Register
+                        </a>
+                    </p>
+
+                </form>
+
             </div>
-          {% endfor %}
-        {% endwith %}
-
-        <form method="POST">
-
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input 
-              type="email" 
-              name="email" 
-              class="form-control" 
-              required>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input 
-              type="password" 
-              name="password" 
-              class="form-control" 
-              required>
-          </div>
-
-          <div class="d-grid justify-content-center mt-3">
-            <button class="btn btn-primary px-4">
-              Login
-            </button>
-          </div>
-
-        </form>
-         <div class="text-center mt-3">
-          <a href="/admin-signup" class="text-decoration-none">
-            Don’t have an account? Register
-          </a>
         </div>
-      </div>
+
     </div>
 
-  </div>
 </div>
 
 {% endblock %}

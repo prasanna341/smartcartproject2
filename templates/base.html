@@ -2,161 +2,124 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartCart</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-
 body{
-    margin:0;
     font-family:"Segoe UI",sans-serif;
     background:#f2f6f8;
-    display:flex;
-    flex-direction:column;
-    min-height:100vh;
 }
 
-/* ===== HEADER WITH NAV ===== */
-.header{
+.navbar{
     background:#69d0d7;
-    padding:15px 30px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
 }
 
-/* Brand */
-.brand{
-    font-size:22px;
+.navbar-brand{
     font-weight:bold;
-    letter-spacing:1px;
-    color:#000;
 }
 
-/* ===== NAVIGATION ===== */
-.nav-links{
-    display:flex;
-    gap:25px;
-}
-
-.nav-links a{
-    text-decoration:none;
-    color:#333;
-    font-weight:500;
-    transition:0.3s;
-    padding-bottom:5px;
-}
-
-.nav-links a:hover{
-    color:#000;
-}
-
-/* Active link */
 .active-link{
     border-bottom:3px solid #000;
 }
 
-/* ===== PAGE CONTENT ===== */
-.page-content{
-    padding:40px;
-    flex:1;
-}
-
-/* ===== FOOTER ===== */
 .footer{
     background:#222;
     color:white;
     text-align:center;
-    padding:15px;
+    padding:12px;
     font-size:14px;
 }
-
 </style>
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-<!-- ===== HEADER ===== -->
-<div class="header">
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
 
-    <!-- LEFT SIDE -->
-    <div class="brand">SMARTCART</div>
+    <a class="navbar-brand" href="#">SMARTCART</a>
 
-    <!-- RIGHT SIDE NAV -->
-    <div class="nav-links">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
 
         {% if session.get('admin_id') %}
 
-            <a href="/admin-dashboard"
-               class="{% if request.path == '/admin-dashboard' %}active-link{% endif %}">
-               Dashboard
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin-dashboard">Dashboard</a>
+        </li>
 
-            <a href="/admin/add-item"
-               class="{% if request.path == '/admin/add-item' %}active-link{% endif %}">
-               Add Products
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/add-item">Add Products</a>
+        </li>
 
-            <a href="/admin/item-list"
-               class="{% if request.path == '/admin/item-list' %}active-link{% endif %}">
-               View Products
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/item-list">View Products</a>
+        </li>
 
-            <a href="/admin-logout">Logout</a>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin-logout">Logout</a>
+        </li>
 
         {% else %}
 
-            <a href="/admin-login"
-               class="{% if request.path == '/admin-login' %}active-link{% endif %}">
-               Login
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin-signup">Register</a>
+        </li>
 
-            <a href="/admin-signup"
-               class="{% if request.path == '/admin-signup' %}active-link{% endif %}">
-               Register
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin-login">Login</a>
+        </li>
 
-            <!-- Visible only before login -->
-            <a href="/about"
-               class="{% if request.path == '/about' %}active-link{% endif %}">
-               About
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
 
-            <a href="/contact"
-               class="{% if request.path == '/contact' %}active-link{% endif %}">
-               Contact
-            </a>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
 
         {% endif %}
 
+      </ul>
     </div>
 
-</div>
+  </div>
+</nav>
 
 
-<!-- ===== FLASH MESSAGES ===== -->
-<div class="container mt-3">
+<!-- CONTENT AREA (Important Fix) -->
+<main class="flex-grow-1 container py-4">
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</div>
+      <div class="alert alert-{{ category }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
     {% endfor %}
   {% endif %}
 {% endwith %}
-</div>
+
+{% block content %}{% endblock %}
+
+</main>
 
 
-<!-- ===== PAGE CONTENT ===== -->
-<div class="page-content">
-    {% block content %}{% endblock %}
-</div>
-
-
-<!-- ===== FOOTER ===== -->
-<div class="footer">
+<!-- FOOTER -->
+<footer class="footer mt-auto">
     © 2026 SmartCart | All Rights Reserved | Built with Flask
-</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
