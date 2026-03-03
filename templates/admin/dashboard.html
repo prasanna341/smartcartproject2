@@ -3,29 +3,39 @@
 
 {% block content %}
 
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height:85vh;">
 
-<div class="row justify-content-center">
-  <div class="col-md-4">
+  <div class="col-11 col-sm-8 col-md-6 col-lg-4">
 
-    <div class="card shadow-sm">
-      <div class="card-body p-4">
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="card-body p-4 p-md-5 text-center">
 
-<!-- Action Buttons -->
- <h3 class="mb-4 text-center fw-bold">SmartCart Admin Dashboard</h3>
-<div class="text-center mt-5">
-  <a href="admin/profile" class="btn btn-outline-info btn-sm">Admin Profile</a>
-  <br><br>
-  <a href="{{ url_for('add_item') }}" class="btn btn-outline-info btn-sm">
-    Add Item
-  </a><br><br>
-  <a href="{{ url_for('item_list') }}" class="btn btn-outline-info btn-sm">
-    View Items
-</a>
-  
+        <h4 class="mb-4 fw-bold">
+          SmartCart Admin Dashboard
+        </h4>
+
+        <!-- Action Buttons -->
+        <div class="d-grid gap-3">
+
+          <a href="admin/profile" class="btn btn-outline-info btn-lg rounded-3">
+            Admin Profile
+          </a>
+
+          <a href="{{ url_for('add_item') }}" class="btn btn-outline-primary btn-lg rounded-3">
+            Add Item
+          </a>
+
+          <a href="{{ url_for('item_list') }}" class="btn btn-outline-success btn-lg rounded-3">
+            View Items
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 
 </div>
-</div>
-</div>
-</div>
-</div>
+
 {% endblock %}
